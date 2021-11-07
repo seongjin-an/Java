@@ -3,6 +3,7 @@ package com.hive.bee.socket;
 import com.hive.bee.msg.Msg;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -13,6 +14,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -74,10 +76,12 @@ public class SocketServer {
                                             System.out.println("strBody:"+strBody);
                                         }
                                     })
-                                    .addLast(new SocketHandler());
+                                    .addLast("handler", new SocketHandler());
 
                         }
                     });
+            ChannelFuture fText = serverBootstrap.bind(this.port).sync();
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         }catch (Exception e){
             e.printStackTrace();
         }
