@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<!--    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>-->
+<!--    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />-->
+<!--    <root level="INFO">-->
+<!--        <appender-ref ref="CONSOLE" />-->
+<!--    </root>-->
+<!--    <logger name="org.springframework.web" level="INFO"/>-->
+
+<!--    <evaluator name="EVALUATOR_CALLER">-->
+<!--        <expression>-->
+<!--            event.getLevel().toInteger()!=Level.INFO.toInteger()-->
+<!--        </expression>-->
+<!--    </evaluator>-->
+<!--    <evaluator name="CALLER_EVALUATOR">-->
+<!--        <expression>event.getLevel().toInteger!=Level.INFO.toInteger()</expression>-->
+<!--    </evaluator>-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss:mmm}] %highlight(%-5p) %cyan(%c) %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>
