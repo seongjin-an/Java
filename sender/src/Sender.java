@@ -1,9 +1,11 @@
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class Sender {
 
@@ -19,7 +21,9 @@ public class Sender {
 
         try {
             byte[] message = msg.getBytes(StandardCharsets.UTF_8);
+
             client = new Socket(host, port);
+
 //            client.connect(new InetSocketAddress(host, port));		// 소켓 연결 타입아웃 시간 설정
 
             bos = new BufferedOutputStream(client.getOutputStream());

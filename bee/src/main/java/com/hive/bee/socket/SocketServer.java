@@ -68,12 +68,13 @@ public class SocketServer {
                                         protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
                                             byteBuf.markReaderIndex();
 
-                                            byte[] byteBody = new byte[1];
+                                            byte[] byteBody = new byte[11];
+                                            logger.info("SOCKET MESSAGE LENGTH: {}", byteBody.length);
                                             byteBuf.readBytes(byteBody);
 
                                             String strBody = new String(byteBody, StandardCharsets.UTF_8);
 
-                                            System.out.println("strBody:"+strBody);
+                                            logger.info("SOCKET MESSAGE: {}", strBody);
                                         }
                                     })
                                     .addLast("handler", new SocketHandler());
