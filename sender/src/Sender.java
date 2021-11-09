@@ -20,7 +20,11 @@ public class Sender {
 
 
         try {
-            byte[] message = msg.getBytes(StandardCharsets.UTF_8);
+            StringBuilder message = new StringBuilder();
+
+            message.append(String.format("%-" + 8 + "s", msg.length()));
+            message.append(msg);
+
 
             client = new Socket(host, port);
 
@@ -28,7 +32,7 @@ public class Sender {
 
             bos = new BufferedOutputStream(client.getOutputStream());
 
-            bos.write(message);
+            bos.write(message.toString().getBytes(StandardCharsets.UTF_8));
             bos.flush();
 
             result = true;
@@ -55,7 +59,7 @@ public class Sender {
     }
 
     public static void main(String[] args) throws SocketException {
-        send("192.168.229.128", 22222, "hello world");
+        send("192.168.229.128", 22222, "hello ansj asdlkfj;lkawej awlkfmnawle;kfj;oaweljfo;iawejfoi  lkaerwjf;olaerwijgoaerg");
     }
 
 }

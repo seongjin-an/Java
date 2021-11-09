@@ -14,7 +14,6 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -67,14 +66,20 @@ public class SocketServer {
                                         @Override
                                         protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
                                             byteBuf.markReaderIndex();
+                                            logger.info("RECEIVED SOCKET MESSAGE!");
 
-                                            byte[] byteBody = new byte[11];
-                                            logger.info("SOCKET MESSAGE LENGTH: {}", byteBody.length);
+                                            byte[] byteBodyLength = new byte[8];
+                                            byteBuf.readBytes(byteBodyLength);
+                                            String bodyLength = new String(byteBodyLength).trim();
+                                            logger.info("SOCKET BODY LENGTH: {}", bodyLength);
+
+                                            byte[] byteBody = new byte[Integer.parseInt(bodyLength)];
                                             byteBuf.readBytes(byteBody);
-
                                             String strBody = new String(byteBody, StandardCharsets.UTF_8);
-
                                             logger.info("SOCKET MESSAGE: {}", strBody);
+                                            logger.info("END");
+
+                                            list.add(strBody);
                                         }
                                     })
                                     .addLast("handler", new SocketHandler());
@@ -82,7 +87,6 @@ public class SocketServer {
                         }
                     });
             ChannelFuture fText = serverBootstrap.bind(this.port).sync();
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         }catch (Exception e){
             e.printStackTrace();
         }
