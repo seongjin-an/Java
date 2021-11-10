@@ -56,32 +56,32 @@ public class SocketServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
-                                    .addLast("encoder", new MessageToByteEncoder<Msg>() {
-                                        @Override
-                                        protected void encode(ChannelHandlerContext channelHandlerContext, Msg msg, ByteBuf byteBuf) throws Exception {
-                                            byteBuf.writeBytes(msg.getMsg());
-                                        }
-                                    })
-                                    .addLast("decoder", new ByteToMessageDecoder() {
-                                        @Override
-                                        protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-                                            byteBuf.markReaderIndex();
-                                            logger.info("RECEIVED SOCKET MESSAGE!");
-
-                                            byte[] byteBodyLength = new byte[8];
-                                            byteBuf.readBytes(byteBodyLength);
-                                            String bodyLength = new String(byteBodyLength).trim();
-                                            logger.info("SOCKET BODY LENGTH: {}", bodyLength);
-
-                                            byte[] byteBody = new byte[Integer.parseInt(bodyLength)];
-                                            byteBuf.readBytes(byteBody);
-                                            String strBody = new String(byteBody, StandardCharsets.UTF_8);
-                                            logger.info("SOCKET MESSAGE: {}", strBody);
-                                            logger.info("END");
-
-                                            list.add(strBody);
-                                        }
-                                    })
+//                                    .addLast("encoder", new MessageToByteEncoder<Msg>() {
+//                                        @Override
+//                                        protected void encode(ChannelHandlerContext channelHandlerContext, Msg msg, ByteBuf byteBuf) throws Exception {
+//                                            byteBuf.writeBytes(msg.getMsg());
+//                                        }
+//                                    })
+//                                    .addLast("decoder", new ByteToMessageDecoder() {
+//                                        @Override
+//                                        protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+//                                            byteBuf.markReaderIndex();
+//                                            logger.info("RECEIVED SOCKET MESSAGE!");
+//
+//                                            byte[] byteBodyLength = new byte[8];
+//                                            byteBuf.readBytes(byteBodyLength);
+//                                            String bodyLength = new String(byteBodyLength).trim();
+//                                            logger.info("SOCKET BODY LENGTH: {}", bodyLength);
+//
+//                                            byte[] byteBody = new byte[Integer.parseInt(bodyLength)];
+//                                            byteBuf.readBytes(byteBody);
+//                                            String strBody = new String(byteBody, StandardCharsets.UTF_8);
+//                                            logger.info("SOCKET MESSAGE: {}", strBody);
+//                                            logger.info("END");
+//
+//                                            list.add(strBody);
+//                                        }
+//                                    })
                                     .addLast("handler", new SocketHandler());
 
                         }
