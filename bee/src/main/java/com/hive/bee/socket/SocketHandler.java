@@ -1,10 +1,7 @@
 package com.hive.bee.socket;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +30,7 @@ public class SocketHandler extends ChannelInboundHandlerAdapter {
 //        ctx.write("success");
         ByteBuf byteBufMessage = (ByteBuf) msg;
         int size = byteBufMessage.readableBytes();
+        logger.info("SIZE: {}", size);
         byte[] byteMessage = new byte[size];
         for(int i=0; i<size; i++){
             byteMessage[i]=byteBufMessage.getByte(i);
@@ -41,14 +39,19 @@ public class SocketHandler extends ChannelInboundHandlerAdapter {
         logger.info("===============================");
         logger.info("SOCKET MESSAGE: {}", str);
         logger.info("===============================");
-        ctx.close();
+
+//        Channel channel = ctx.channel();
+//        channel.writeAndFlush("SUCCESS!!!");
+//        ChannelFuture future = ctx.writeAndFlush("SUCCESS");
+//        future.addListener(ChannelFutureListener.CLOSE);
+        ctx.write("SUCCESS");
+
     }
 
 
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        super.channelReadComplete(ctx);
         ctx.flush();
     }
 

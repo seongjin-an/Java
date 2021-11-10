@@ -27,10 +27,11 @@ public class Sender {
 
 
             client = new Socket(host, port);
-
+            client.setKeepAlive(true);
 //            client.connect(new InetSocketAddress(host, port));		// 소켓 연결 타입아웃 시간 설정
 
             bos = new BufferedOutputStream(client.getOutputStream());
+
 
             bos.write(message.toString().getBytes(StandardCharsets.UTF_8));
             bos.flush();
