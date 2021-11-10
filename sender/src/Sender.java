@@ -59,7 +59,7 @@ public class Sender {
     }
 
     public static void main(String[] args) throws SocketException {
-        send("192.168.229.128", 22222, "hello ansj asdlkfj;lkawej awlkfmnawle;kfj;oaweljfo;iawejfoi  lkaerwjf;olaerwijgoaerg");
+        send("192.168.229.128", 22222, "hello\nworld");
     }
 
 }

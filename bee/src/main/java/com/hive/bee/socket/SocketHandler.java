@@ -1,7 +1,9 @@
 package com.hive.bee.socket;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 
 public class SocketHandler extends ChannelInboundHandlerAdapter {
     @Override
@@ -17,13 +19,19 @@ public class SocketHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         super.channelRead(ctx, msg);
-        ctx.writeAndFlush("000");
+//        ctx.writeAndFlush("000");
+//        ctx.write(msg);
+        ctx.write("success");
     }
+
+
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         super.channelReadComplete(ctx);
-        ctx.writeAndFlush("000");
+//        ctx.writeAndFlush("000");
+        ctx.write("SUCCESS");
+        ctx.flush();
     }
 
     @Override
