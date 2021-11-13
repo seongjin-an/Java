@@ -28,6 +28,8 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
         System.out.println(builder.toString());
 
         ctx.writeAndFlush(messageBuffer);
+        ctx.writeAndFlush("HELLO!!!!");
+        ctx.channel().writeAndFlush("HELLO");
     }
 
     @Override
@@ -40,11 +42,13 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
         builder.append("]");
 //        logger.info("RECEIVED SOCKET MESSAGE: {}", builder.toString());
         System.out.println(builder.toString());
+        System.out.println(((ByteBuf) msg).toString());
+        System.out.println((String)msg);
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.close();
+        ctx.flush();
     }
 
     @Override

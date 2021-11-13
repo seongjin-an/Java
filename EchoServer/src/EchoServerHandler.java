@@ -21,6 +21,19 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        Channel newChannel = ctx.channel();
+        System.out.println("[channelRegistered] :".concat(newChannel.remoteAddress().toString()));
+
+        for(Channel channel: channels){
+            channel.write(
+                    "[SERVER] ".concat(newChannel.remoteAddress().toString()).concat(" login")
+            );
+        }
+        channels.add(newChannel);
+    }
+
+    @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         Channel incoming = ctx.channel();
         for (Channel channel : channels) {
@@ -35,6 +48,12 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        Channel newChannel = ctx.channel();
+        System.out.println("[NEW CLIENT] remote address - ".concat(newChannel.remoteAddress().toString()));
+    }
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         String readMessage = ((ByteBuf) msg).toString(Charset.defaultCharset());
@@ -45,6 +64,17 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         messageBuffer.writeBytes(responseMessage.getBytes(StandardCharsets.UTF_8));
         //ctx.write("SUCCESS");//XXXX
         ctx.write(messageBuffer);
+    }
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        Channel oldChannel = ctx.channel();
+        System.out.println("[channelUnregistered]: ".concat(oldChannel.remoteAddress().toString()));
+        for(Channel channel: channels){
+            channel.write(
+                    "[SERVER] ".concat(oldChannel.remoteAddress().toString()).concat(" LOGOUT")
+            );
+        }
+        channels.remove(oldChannel);
     }
 
     @Override

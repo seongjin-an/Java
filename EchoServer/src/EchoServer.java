@@ -1,15 +1,8 @@
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class EchoServer {
     public static void main(String[] args) {
@@ -28,6 +21,17 @@ public class EchoServer {
                         }
                     });
             ChannelFuture channelFuture = serverBootstrap.bind(8888).sync();
+            channelFuture.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    if(channelFuture.isSuccess()){
+                        System.out.println("SERVER BOUND");
+                    }else{
+                        System.out.println("BOUND ATTEMPT FAILED");
+                        channelFuture.cause().printStackTrace();
+                    }
+                }
+            });
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
