@@ -14,13 +14,15 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private static Map<String, List<Channel>> rooms = new HashMap<>();
     private static int TEST_ROOM = 0;
+    private String ROOM_ODD = "odd";
+    private String ROOM_EVEN = "even";
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
 
         Channel newChannel = ctx.channel();
         channelGroup.add(newChannel);
-        TEST_ROOM += 2;
+        TEST_ROOM += 1;
         String nm = TEST_ROOM % 2 == 0 ? "even" : "odd";
         if(rooms.get(nm) == null){
             System.out.println("new room");
@@ -73,15 +75,21 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
         message = (String) msg;
         System.out.println("[channelRead]: ".concat(message));
         Channel msgSender = ctx.channel();
-        for(Channel channel: channelGroup){
-            System.out.println("CHANNEL: ".concat(channel.remoteAddress().toString()));
-            channel.writeAndFlush(
-                    "[".concat(msgSender.remoteAddress().toString()).concat("]").concat(message).concat("\n")
-            );
-        }
+//        for(Channel channel: channelGroup){
+//            System.out.println("CHANNEL: ".concat(channel.remoteAddress().toString()));
+//            channel.writeAndFlush(
+//                    "[".concat(msgSender.remoteAddress().toString()).concat("]").concat(message).concat("\n")
+//            );
+//        }
+        rooms.entrySet().forEach(System.out::println);
         String nm = TEST_ROOM % 2 == 0 ? "even" : "odd";
         if(rooms.get(nm)!=null){
-            List<Channel> channels = rooms.get(nm);
+//            if(nm.equals("even")){
+//
+//            }else if(nm.equals("odd")){
+//
+//            }
+            List<Channel> channels = rooms.get(ROOM_ODD);
             for(Channel channel: channels){
                 System.out.println("CHANNEL: ".concat(channel.remoteAddress().toString()));
                 channel.writeAndFlush(
