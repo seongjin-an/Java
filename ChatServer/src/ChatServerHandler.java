@@ -13,16 +13,15 @@ import java.util.Map;
 public class ChatServerHandler extends ChannelInboundHandlerAdapter {
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private static Map<String, List<Channel>> rooms = new HashMap<>();
-    private static int imsi = 0;
+    private static int TEST_ROOM = 0;
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
 
         Channel newChannel = ctx.channel();
         channelGroup.add(newChannel);
-        imsi += 2;
-        String nm = imsi % 2 == 0 ? "even" : "odd";
-        System.out.println("imsi:"+imsi);
+        TEST_ROOM += 2;
+        String nm = TEST_ROOM % 2 == 0 ? "even" : "odd";
         if(rooms.get(nm) == null){
             System.out.println("new room");
             List<Channel> newList = new ArrayList<>();
@@ -37,13 +36,10 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("[channelRegistered] :".concat(newChannel.remoteAddress().toString()));
 
         for(Channel channel: channelGroup){
-
             channel.writeAndFlush(
                     "[SERVER] ".concat(newChannel.remoteAddress().toString()).concat(" LOGIN").concat("\n")
             );
         }
-
-
     }
 
     @Override
@@ -62,6 +58,13 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
             );
         }
         channelGroup.remove(oldChannel);
+
+        String nm = TEST_ROOM % 2 == 0 ? "even" : "odd";
+        if(rooms.get(nm) != null){
+            rooms.get(nm).remove(oldChannel);
+            rooms.get(nm).forEach(System.out::println);
+        }
+
     }
 
     @Override
@@ -75,6 +78,16 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
             channel.writeAndFlush(
                     "[".concat(msgSender.remoteAddress().toString()).concat("]").concat(message).concat("\n")
             );
+        }
+        String nm = TEST_ROOM % 2 == 0 ? "even" : "odd";
+        if(rooms.get(nm)!=null){
+            List<Channel> channels = rooms.get(nm);
+            for(Channel channel: channels){
+                System.out.println("CHANNEL: ".concat(channel.remoteAddress().toString()));
+                channel.writeAndFlush(
+                        "[".concat(msgSender.remoteAddress().toString()).concat("]").concat(message).concat("\n")
+                );
+            }
         }
     }
 
