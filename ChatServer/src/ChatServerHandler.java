@@ -33,6 +33,7 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("exist room");
             rooms.get(nm).add(newChannel);
         }
+        rooms.get(nm).forEach(System.out::println);
         System.out.println("[channelRegistered] :".concat(newChannel.remoteAddress().toString()));
 
         for(Channel channel: channelGroup){
