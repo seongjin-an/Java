@@ -84,7 +84,7 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
         rooms.entrySet().forEach(System.out::println);
         String nm = TEST_ROOM % 2 == 0 ? "even" : "odd";
         if(rooms.get(nm)!=null){
-            List<Channel> channels = rooms.get(ROOM_ODD); 
+            List<Channel> channels = rooms.get(ROOM_ODD);
             for(Channel channel: channels){
                 System.out.println("CHANNEL: ".concat(channel.remoteAddress().toString()));
                 channel.writeAndFlush(
