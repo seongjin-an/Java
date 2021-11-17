@@ -16,7 +16,6 @@ public class ChatServerHandler extends ChannelInboundHandlerAdapter {
     private static int TEST_ROOM = 0;
     private String ROOM_ODD = "odd";
     private String ROOM_EVEN = "even";
-    private String imsi = "imsi";
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
